@@ -27,7 +27,6 @@ namespace AuthServer.API.Controllers
         public IActionResult CreateTokenByClient(ClientLoginDto clientLoginDto)
         {
             var result = _authenticationService.CreateTokenByClient(clientLoginDto);
-
             return ActionResultInstance(result);
         }
 
@@ -35,7 +34,6 @@ namespace AuthServer.API.Controllers
         public async Task<IActionResult> CreateTokenByRefreshToken(RefreshTokenDto refreshTokenDto)
         {
             var result = await _authenticationService.CreateTokenByRefreshToken(refreshTokenDto.RefreshToken);
-
             return ActionResultInstance(result);
         }
 
@@ -43,7 +41,6 @@ namespace AuthServer.API.Controllers
         public async Task<IActionResult> RevokeRefreshToken(RefreshTokenDto refreshTokenDto)
         {
             var result = await _authenticationService.RevokeRefreshToken(refreshTokenDto.RefreshToken);
-
             return ActionResultInstance(result);
         }
     }

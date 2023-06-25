@@ -56,7 +56,7 @@ namespace AuthServer.Service.Services
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, client.ClientId.ToString())
+                new Claim(JwtRegisteredClaimNames.Sub, client.Id.ToString())
             };
             claims.AddRange(client.Audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
 

@@ -67,7 +67,7 @@ namespace AuthServer.Service.Services
 
         public Response<ClientTokenDto> CreateTokenByClient(ClientLoginDto clientLoginDto)
         {
-            var client = _clients.SingleOrDefault(x => x.ClientId == clientLoginDto.ClientId && x.ClientSecret == clientLoginDto.ClientSecret);
+            var client = _clients.SingleOrDefault(x => x.Id == clientLoginDto.ClientId && x.Secret == clientLoginDto.ClientSecret);
 
             if (client is null)
                 return Response<ClientTokenDto>.Fail("ClientId or Client Secret not found", 404, true);
