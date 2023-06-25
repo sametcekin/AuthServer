@@ -14,7 +14,10 @@ namespace SharedLibrary.Models
 
         public ErrorDto(string error, bool isShow)
         {
-            Errors.Add(error);
+            Errors = new List<string>
+            {
+                error
+            };
             IsShow = isShow;
         }
 
