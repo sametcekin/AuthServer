@@ -18,11 +18,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SharedLibrary.Configurations;
+using SharedLibrary.Exceptions;
+using SharedLibrary.Extensions;
 using SharedLibrary.Services;
 using System;
 using System.Collections.Generic;
-using SharedLibrary.Extensions;
-using SharedLibrary.Exceptions;
 
 namespace AuthServer.API
 {
