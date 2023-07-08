@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configurations;
 using SharedLibrary.Services;
-using System;
 
 namespace SharedLibrary.Extensions
 {

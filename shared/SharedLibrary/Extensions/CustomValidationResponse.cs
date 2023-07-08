@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using SharedLibrary.Dtos;
 using SharedLibrary.Models;
-using System.Linq;
 
 namespace SharedLibrary.Extensions
 {

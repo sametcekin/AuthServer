@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SharedLibrary.Configurations
+﻿namespace SharedLibrary.Configurations
 {
     public class CustomTokenOptions
     {
