@@ -11,10 +11,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using RedisCache;
 using SharedLibrary.Configurations;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Extensions;
 using SharedLibrary.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -80,6 +82,9 @@ builder.Services
         ClockSkew = TimeSpan.Zero
     };
 });
+
+
+builder.Services.AddRedisCacheService(builder.Configuration);
 
 var app = builder.Build();
 
