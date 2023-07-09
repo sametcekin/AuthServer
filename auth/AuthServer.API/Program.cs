@@ -49,18 +49,22 @@ builder.Services.AddIdentity<UserApp, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = true;
     options.Password.RequireNonAlphanumeric = false;
-}).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+})
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
 
 builder.Services.Configure<CustomTokenOptions>(builder.Configuration.GetSection("TokenOption"));
 var tokenOptions = builder.Configuration.GetSection("TokenOption").Get<CustomTokenOptions>();
 
 builder.Services.Configure<List<Client>>(builder.Configuration.GetSection("Clients"));
 
-builder.Services.AddAuthentication(options =>
+builder.Services
+.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+})
+.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
