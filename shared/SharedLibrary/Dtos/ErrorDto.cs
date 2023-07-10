@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SharedLibrary.Models
+﻿namespace SharedLibrary.Models
 {
     public class ErrorDto
     {

@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 namespace AuthServer.Service.Services
 {
@@ -26,7 +27,9 @@ namespace AuthServer.Service.Services
             _tokenOption = options.Value;
         }
 
-        private string CreateRefreshToken()
+        #region Helper
+
+        private static string CreateRefreshToken()
         {
             var numberByte = new Byte[32];
             using var rnd = RandomNumberGenerator.Create();
@@ -36,8 +39,10 @@ namespace AuthServer.Service.Services
             return Convert.ToBase64String(numberByte);
         }
 
-        private IEnumerable<Claim> GetClaims(UserApp user, List<string> audiences)
+        private async Task<IEnumerable<Claim>> GetClaims(UserApp user, List<string> audiences)
         {
+            var userRoles = await _userManager.GetRolesAsync(user);
+
             var userList = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier,user.Id),
@@ -47,11 +52,11 @@ namespace AuthServer.Service.Services
             };
 
             userList.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
-
+            userList.AddRange(userRoles.Select(x => new Claim(ClaimTypes.Role, x)));
             return userList;
         }
 
-        private IEnumerable<Claim> GetClaimsByClient(Client client)
+        private static IEnumerable<Claim> GetClaimsByClient(Client client)
         {
             var claims = new List<Claim>
             {
@@ -63,18 +68,20 @@ namespace AuthServer.Service.Services
             return claims;
         }
 
-        public TokenDto CreateToken(UserApp userApp)
+        #endregion
+
+        public async Task<TokenDto> CreateTokenAsync(UserApp userApp)
         {
             var accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOption.AccessTokenExpiration);
             var refreshTokenExpiration = DateTime.Now.AddMinutes(_tokenOption.RefreshTokenExpiration);
             var securityKey = SignService.GetSymmetricSecurityKey(_tokenOption.SecurityKey);
-            SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+            SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
-            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
+            JwtSecurityToken jwtSecurityToken = new(
                 issuer: _tokenOption.Issuer,
                 expires: accessTokenExpiration,
                 notBefore: DateTime.Now,
-                claims: GetClaims(userApp, _tokenOption.Audience),
+                claims: await GetClaims(userApp, _tokenOption.Audience),
                 signingCredentials: signingCredentials);
 
             var handler = new JwtSecurityTokenHandler();
@@ -96,9 +103,9 @@ namespace AuthServer.Service.Services
         {
             var accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOption.AccessTokenExpiration);
             var securityKey = SignService.GetSymmetricSecurityKey(_tokenOption.SecurityKey);
-            SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+            SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
-            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
+            JwtSecurityToken jwtSecurityToken = new(
                 issuer: _tokenOption.Issuer,
                 expires: accessTokenExpiration,
                 notBefore: DateTime.Now,
