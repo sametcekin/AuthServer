@@ -41,6 +41,6 @@ namespace AuthServer.API.Controllers
         {
             var result = await _authenticationService.RevokeRefreshToken(refreshTokenDto.RefreshToken);
             return ActionResultInstance(result);
-        }
+        }s
     }
 }
