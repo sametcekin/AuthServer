@@ -15,9 +15,11 @@ namespace AuthServer.Data.Configurations
             {
                 Id = USER_ID,
                 Email = "admin@admin.com",
+                NormalizedEmail = "ADMIN@ADMIN.COM",
                 EmailConfirmed = true,
                 UserName = "admin",
-                NormalizedEmail = "ADMIN"
+                NormalizedUserName = "ADMIN",
+                ConcurrencyStamp = USER_ID.ToString(),
             };
             user.PasswordHash = new PasswordHasher<UserApp>().HashPassword(user, "admin");
             builder.HasData(user);
