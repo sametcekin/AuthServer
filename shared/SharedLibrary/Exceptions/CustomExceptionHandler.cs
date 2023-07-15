@@ -23,13 +23,14 @@ namespace SharedLibrary.Exceptions
                     if (errorFeature is not null)
                     {
                         var ex = errorFeature.Error;
+                        var path = errorFeature.Path;
 
                         ErrorDto errorDto = new();
 
                         if (ex is CustomException)
-                            errorDto = new ErrorDto(ex.Message, true);
+                            errorDto = new ErrorDto(ex.Message, path, true);
                         else
-                            errorDto = new ErrorDto(ex.Message, false);
+                            errorDto = new ErrorDto(ex.Message, path, false);
 
                         var response = Response<NoDataDto>.Fail(errorDto, 500);
 

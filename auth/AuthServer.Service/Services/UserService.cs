@@ -1,10 +1,14 @@
 ﻿using AuthServer.Core.DTOs;
 using AuthServer.Core.Entities;
 using AuthServer.Core.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RedisCache.Services;
 using SharedLibrary.Dtos;
 using SharedLibrary.Models;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,11 +17,13 @@ namespace AuthServer.Service.Services
     public class UserService : IUserService
     {
         private readonly UserManager<UserApp> _userManager;
+        private readonly RoleManager<RoleApp> _roleManager;
         private readonly ICacheService _cacheService;
-        public UserService(UserManager<UserApp> userManager, ICacheService cacheService)
+        public UserService(UserManager<UserApp> userManager, ICacheService cacheService, RoleManager<RoleApp> roleManager)
         {
             _userManager = userManager;
             _cacheService = cacheService;
+            _roleManager = roleManager;
         }
 
         public async Task<Response<UserAppDto>> CreateUserAsync(CreateUserDto createUserDto)
@@ -40,6 +46,21 @@ namespace AuthServer.Service.Services
             return Response<UserAppDto>.Success(ObjectMapper.Mapper.Map<UserAppDto>(user), 200);
         }
 
+        public async Task<Response<NoContent>> CreateUserRoles(Guid userId, CreateUserRoleDto createUserRoleDto)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user is null)
+                return Response<NoContent>.Fail("User not found", 404, true);
+            var roleRequest = createUserRoleDto.RoleIds.Select(x => x.ToString());
+            var roles = _roleManager.Roles.Where(x => createUserRoleDto.RoleIds.Any(a => a == x.Id)).Select(a => a.Name).ToList();
+            if (roles is null)
+                return Response<NoContent>.Fail("Role not found", 404, true);
+
+            await _userManager.AddToRolesAsync(user, roles);
+
+            return Response<NoContent>.Success(200);
+        }
+
         public async Task<Response<UserAppDto>> GetUserByNameAsync(string userName)
         {
             var user = await _cacheService.GetOrAddAsync("user", async () => { return await _userManager.FindByNameAsync(userName); });
@@ -47,6 +68,12 @@ namespace AuthServer.Service.Services
                 return Response<UserAppDto>.Fail("Username not found", 404, true);
 
             return Response<UserAppDto>.Success(ObjectMapper.Mapper.Map<UserAppDto>(user), 200);
+        }
+
+        public async Task<Response<List<UserAppDto>>> GetListAsync()
+        {
+            var userList = await _userManager.Users.ToListAsync();
+            return Response<List<UserAppDto>>.Success(ObjectMapper.Mapper.Map<List<UserAppDto>>(userList), 200);
         }
     }
 }

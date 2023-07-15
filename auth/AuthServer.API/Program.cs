@@ -33,6 +33,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
@@ -47,13 +48,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     });
 });
 
-builder.Services.AddIdentity<UserApp, IdentityRole>(options =>
+builder.Services
+.AddIdentity<UserApp, RoleApp>(options =>
 {
     options.User.RequireUniqueEmail = true;
     options.Password.RequireNonAlphanumeric = false;
 })
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
+
 
 builder.Services.Configure<CustomTokenOptions>(builder.Configuration.GetSection("TokenOption"));
 var tokenOptions = builder.Configuration.GetSection("TokenOption").Get<CustomTokenOptions>();

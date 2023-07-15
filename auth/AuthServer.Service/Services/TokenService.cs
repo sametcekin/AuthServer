@@ -45,12 +45,11 @@ namespace AuthServer.Service.Services
 
             var userList = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier,user.Id),
+                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email,user.Email),
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
             };
-
             userList.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
             userList.AddRange(userRoles.Select(x => new Claim(ClaimTypes.Role, x)));
             return userList;

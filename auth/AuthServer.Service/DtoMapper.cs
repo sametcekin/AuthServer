@@ -10,6 +10,7 @@ namespace AuthServer.Service
         {
             CreateMap<ProductDto, Product>().ReverseMap();
             CreateMap<UserAppDto, UserApp>().ReverseMap();
+            CreateMap<RoleAppDto, RoleApp>().ReverseMap();
         }
     }
 }

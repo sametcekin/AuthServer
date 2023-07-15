@@ -84,7 +84,7 @@ namespace AuthServer.Service.Services
             if (existRefreshToken is null)
                 return Response<TokenDto>.Fail("Refresht token not found", 404, true);
 
-            var user = await _userManager.FindByIdAsync(existRefreshToken.UserId);
+            var user = await _userManager.FindByIdAsync(existRefreshToken.UserId.ToString());
 
             if (user is null)
                 return Response<TokenDto>.Fail("User id not found", 404, true);
