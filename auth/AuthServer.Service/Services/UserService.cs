@@ -51,12 +51,14 @@ namespace AuthServer.Service.Services
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user is null)
                 return Response<NoContent>.Fail("User not found", 404, true);
-            var roleRequest = createUserRoleDto.RoleIds.Select(x => x.ToString());
+            var userRoles = await _userManager.GetRolesAsync(user);
+
             var roles = _roleManager.Roles.Where(x => createUserRoleDto.RoleIds.Any(a => a == x.Id)).Select(a => a.Name).ToList();
             if (roles is null)
                 return Response<NoContent>.Fail("Role not found", 404, true);
 
-            await _userManager.AddToRolesAsync(user, roles);
+            var addedRoles = roles.Except(userRoles);
+            var addRoleResult = await _userManager.AddToRolesAsync(user, addedRoles);
 
             return Response<NoContent>.Success(200);
         }
