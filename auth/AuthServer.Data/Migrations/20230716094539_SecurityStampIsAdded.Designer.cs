@@ -4,6 +4,7 @@ using AuthServer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuthServer.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230716094539_SecurityStampIsAdded")]
+    partial class SecurityStampIsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,8 +122,7 @@ namespace AuthServer.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAECEJxPgT46o42xgljOEDySLqnLk8lQ6GYewUypKOA4pFSJR2O36oHIgHUGOq0DM3TQ==",
-                            SecurityStamp = "17c52fda-d109-44cf-a64c-9dbfc00f24b8",
+                            PasswordHash = "AQAAAAIAAYagAAAAEC1wGVoFmnjF68CstkcPB35NY6Ez6JkJgYpfIp0c7hoqjF/a2HPlF6H+k+47tRrJ8A==",
                             UserName = "admin"
                         });
                 });
@@ -141,7 +143,7 @@ namespace AuthServer.Data.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("UserRefreshTokens", (string)null);
+                    b.ToTable("UserRefreshTokens");
                 });
 
             modelBuilder.Entity("AuthServer.Core.Entities.UserRoleApp", b =>

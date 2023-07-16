@@ -10,8 +10,7 @@ namespace AuthServer.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<UserApp> builder)
         {
-            builder.Ignore(u => u.SecurityStamp)
-                   .Ignore(u => u.ConcurrencyStamp)
+            builder.Ignore(u => u.ConcurrencyStamp)
                    .Ignore(u => u.PhoneNumber)
                    .Ignore(u => u.PhoneNumberConfirmed)
                    .Ignore(u => u.TwoFactorEnabled)
@@ -28,6 +27,7 @@ namespace AuthServer.Data.Configurations
                 UserName = "admin",
                 NormalizedUserName = "ADMIN",
                 ConcurrencyStamp = USER_ID.ToString(),
+                SecurityStamp = USER_ID.ToString(),
             };
             user.PasswordHash = new PasswordHasher<UserApp>().HashPassword(user, "admin");
             builder.HasData(user);
