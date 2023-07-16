@@ -32,5 +32,11 @@ namespace AuthServer.API.Controllers
         {
             return ActionResultInstance(await _roleService.CreateAsync(createRoleDto));
         }
+
+        [HttpDelete("{roleId}")]
+        public async Task<IActionResult> DeleteAsync(Guid roleId)
+        {
+            return ActionResultInstance(await _roleService.DeleteAsync(roleId));
+        }
     }
 }
