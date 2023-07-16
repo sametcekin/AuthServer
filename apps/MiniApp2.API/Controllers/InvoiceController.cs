@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace MiniApp2.API.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class InvoiceController : ControllerBase
