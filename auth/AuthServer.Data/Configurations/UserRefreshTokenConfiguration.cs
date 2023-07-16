@@ -9,8 +9,7 @@ namespace AuthServer.Data.Configurations
         public void Configure(EntityTypeBuilder<UserRefreshToken> builder)
         {
             builder.HasKey(x => x.UserId);
-            builder.Property(x => x.Code).IsRequired().HasMaxLength(200);
-
+            builder.Property(x => x.Value).IsRequired().HasMaxLength(200);
         }
     }
 }

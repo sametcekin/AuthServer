@@ -10,6 +10,14 @@ namespace AuthServer.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<UserApp> builder)
         {
+            builder.Ignore(u => u.SecurityStamp)
+                   .Ignore(u => u.ConcurrencyStamp)
+                   .Ignore(u => u.PhoneNumber)
+                   .Ignore(u => u.PhoneNumberConfirmed)
+                   .Ignore(u => u.TwoFactorEnabled)
+                   .Ignore(u => u.LockoutEnd)
+                   .Ignore(u => u.AccessFailedCount);
+
             var USER_ID = new Guid("17c52fda-d109-44cf-a64c-9dbfc00f24b8");
             var user = new UserApp
             {

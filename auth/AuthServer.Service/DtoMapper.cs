@@ -8,7 +8,6 @@ namespace AuthServer.Service
     {
         public DtoMapper()
         {
-            CreateMap<ProductDto, Product>().ReverseMap();
             CreateMap<UserAppDto, UserApp>().ReverseMap();
             CreateMap<RoleAppDto, RoleApp>().ReverseMap();
         }

@@ -53,10 +53,10 @@ namespace AuthServer.Service.Services
             var userRefreshToken = await _userRefrehTokenRepository.Where(x => x.UserId == user.Id).SingleOrDefaultAsync();
 
             if (userRefreshToken is null)
-                await _userRefrehTokenRepository.AddAsync(new UserRefreshToken { UserId = user.Id, Code = token.RefreshToken, Expiration = token.RefreshTokenExpiration });
+                await _userRefrehTokenRepository.AddAsync(new UserRefreshToken { UserId = user.Id, Value = token.RefreshToken, Expiration = token.RefreshTokenExpiration });
             else
             {
-                userRefreshToken.Code = token.RefreshToken;
+                userRefreshToken.Value = token.RefreshToken;
                 userRefreshToken.Expiration = token.RefreshTokenExpiration;
             }
 
@@ -79,7 +79,7 @@ namespace AuthServer.Service.Services
 
         public async Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken)
         {
-            var existRefreshToken = await _userRefrehTokenRepository.Where(x => x.Code == refreshToken).FirstOrDefaultAsync();
+            var existRefreshToken = await _userRefrehTokenRepository.Where(x => x.Value == refreshToken).FirstOrDefaultAsync();
 
             if (existRefreshToken is null)
                 return Response<TokenDto>.Fail("Refresht token not found", 404, true);
@@ -91,7 +91,7 @@ namespace AuthServer.Service.Services
 
             var tokenDto = await _tokenService.CreateTokenAsync(user);
 
-            existRefreshToken.Code = tokenDto.RefreshToken;
+            existRefreshToken.Value = tokenDto.RefreshToken;
             existRefreshToken.Expiration = tokenDto.RefreshTokenExpiration;
 
             await _unitOfWork.CommitAsync();
@@ -101,7 +101,7 @@ namespace AuthServer.Service.Services
 
         public async Task<Response<NoContentResult>> RevokeRefreshToken(string refreshToken)
         {
-            var existRefreshToken = await _userRefrehTokenRepository.Where(x => x.Code == refreshToken).FirstOrDefaultAsync();
+            var existRefreshToken = await _userRefrehTokenRepository.Where(x => x.Value == refreshToken).FirstOrDefaultAsync();
 
             if (existRefreshToken is null)
                 return Response<NoContentResult>.Fail("Refresh token not found", 404, true);

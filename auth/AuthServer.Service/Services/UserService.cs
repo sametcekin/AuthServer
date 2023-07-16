@@ -63,7 +63,7 @@ namespace AuthServer.Service.Services
 
         public async Task<Response<UserAppDto>> GetUserByNameAsync(string userName)
         {
-            var user = await _cacheService.GetOrAddAsync("user", async () => { return await _userManager.FindByNameAsync(userName); });
+            var user = await _cacheService.GetOrSetAsync("user", async () => { return await _userManager.FindByNameAsync(userName); });
             if (user is null)
                 return Response<UserAppDto>.Fail("Username not found", 404, true);
 
