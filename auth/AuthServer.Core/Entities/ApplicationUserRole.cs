@@ -3,7 +3,7 @@ using System;
 
 namespace AuthServer.Core.Entities
 {
-    public class RoleApp : IdentityRole<Guid>
+    public class ApplicationUserRole : IdentityUserRole<Guid>
     {
     }
 }

@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 
 namespace AuthServer.Core.Entities
 {
-    public class RoleClaimApp : IdentityRoleClaim<Guid>
+    public class ApplicationRole : IdentityRole<Guid>
     {
     }
 }

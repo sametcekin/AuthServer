@@ -16,10 +16,10 @@ namespace AuthServer.Service.Services
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<UserApp> _userManager;
-        private readonly RoleManager<RoleApp> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ICacheService _cacheService;
-        public UserService(UserManager<UserApp> userManager, ICacheService cacheService, RoleManager<RoleApp> roleManager)
+        public UserService(UserManager<ApplicationUser> userManager, ICacheService cacheService, RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _cacheService = cacheService;
@@ -28,7 +28,7 @@ namespace AuthServer.Service.Services
 
         public async Task<Response<UserAppDto>> CreateUserAsync(CreateUserDto createUserDto)
         {
-            var user = new UserApp
+            var user = new ApplicationUser
             {
                 Email = createUserDto.Email,
                 UserName = createUserDto.UserName,

@@ -19,9 +19,9 @@ namespace AuthServer.Service.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly UserManager<UserApp> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly CustomTokenOptions _tokenOption;
-        public TokenService(UserManager<UserApp> userManager, IOptions<CustomTokenOptions> options)
+        public TokenService(UserManager<ApplicationUser> userManager, IOptions<CustomTokenOptions> options)
         {
             _userManager = userManager;
             _tokenOption = options.Value;
@@ -39,7 +39,7 @@ namespace AuthServer.Service.Services
             return Convert.ToBase64String(numberByte);
         }
 
-        private async Task<IEnumerable<Claim>> GetClaims(UserApp user, List<string> audiences)
+        private async Task<IEnumerable<Claim>> GetClaims(ApplicationUser user, List<string> audiences)
         {
             var userRoles = await _userManager.GetRolesAsync(user);
 
@@ -69,7 +69,7 @@ namespace AuthServer.Service.Services
 
         #endregion
 
-        public async Task<TokenDto> CreateTokenAsync(UserApp userApp)
+        public async Task<TokenDto> CreateTokenAsync(ApplicationUser userApp)
         {
             var accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOption.AccessTokenExpiration);
             var refreshTokenExpiration = DateTime.Now.AddMinutes(_tokenOption.RefreshTokenExpiration);

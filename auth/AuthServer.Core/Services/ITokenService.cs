@@ -7,7 +7,7 @@ namespace AuthServer.Core.Services
 {
     public interface ITokenService
     {
-        Task<TokenDto> CreateTokenAsync(UserApp userApp);
+        Task<TokenDto> CreateTokenAsync(ApplicationUser userApp);
         ClientTokenDto CreateTokenByClient(Client client);
     }
 }

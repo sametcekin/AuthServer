@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AuthServer.Data.Configurations
 {
-    public class RoleClaimAppConfiguration : IEntityTypeConfiguration<RoleClaimApp>
+    public class ApplicationRoleClaimConfiguration : IEntityTypeConfiguration<ApplicationRoleClaim>
     {
-        public void Configure(EntityTypeBuilder<RoleClaimApp> builder)
+        public void Configure(EntityTypeBuilder<ApplicationRoleClaim> builder)
         {
         }
     }

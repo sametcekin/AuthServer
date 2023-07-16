@@ -6,9 +6,9 @@ using System;
 
 namespace AuthServer.Data.Configurations
 {
-    public class UserAppConfiguration : IEntityTypeConfiguration<UserApp>
+    public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {
-        public void Configure(EntityTypeBuilder<UserApp> builder)
+        public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
             builder.Ignore(u => u.ConcurrencyStamp)
                    .Ignore(u => u.PhoneNumber)
@@ -18,7 +18,7 @@ namespace AuthServer.Data.Configurations
                    .Ignore(u => u.AccessFailedCount);
 
             var USER_ID = new Guid("17c52fda-d109-44cf-a64c-9dbfc00f24b8");
-            var user = new UserApp
+            var user = new ApplicationUser
             {
                 Id = USER_ID,
                 Email = "admin@admin.com",
@@ -29,8 +29,10 @@ namespace AuthServer.Data.Configurations
                 ConcurrencyStamp = USER_ID.ToString(),
                 SecurityStamp = USER_ID.ToString(),
             };
-            user.PasswordHash = new PasswordHasher<UserApp>().HashPassword(user, "admin");
+            user.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(user, "admin");
             builder.HasData(user);
+
+
         }
     }
 }

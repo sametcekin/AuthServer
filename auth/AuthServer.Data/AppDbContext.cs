@@ -6,7 +6,7 @@ using System;
 
 namespace AuthServer.Data
 {
-    public class AppDbContext : IdentityDbContext<UserApp, RoleApp, Guid, IdentityUserClaim<Guid>, UserRoleApp, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
+    public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, IdentityUserClaim<Guid>, ApplicationUserRole, IdentityUserLogin<Guid>, ApplicationRoleClaim, IdentityUserToken<Guid>>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

@@ -16,9 +16,9 @@ namespace AuthServer.Service.Services
 {
     public class RoleService : IRoleService
     {
-        private readonly RoleManager<RoleApp> _roleManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ICacheService _cacheService;
-        public RoleService(RoleManager<RoleApp> roleManager, ICacheService cacheService)
+        public RoleService(RoleManager<ApplicationRole> roleManager, ICacheService cacheService)
         {
             _roleManager = roleManager;
             _cacheService = cacheService;
@@ -26,7 +26,7 @@ namespace AuthServer.Service.Services
 
         public async Task<Response<NoContent>> CreateAsync(CreateRoleDto createRoleDto)
         {
-            var result = await _roleManager.CreateAsync(new RoleApp { Name = createRoleDto.Name });
+            var result = await _roleManager.CreateAsync(new ApplicationRole { Name = createRoleDto.Name });
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(x => x.Description).ToList();

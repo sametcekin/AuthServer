@@ -16,12 +16,13 @@ using SharedLibrary.Configurations;
 using SharedLibrary.Exceptions;
 using SharedLibrary.Extensions;
 using SharedLibrary.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; }); ;
 
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
@@ -49,7 +50,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services
-.AddIdentity<UserApp, RoleApp>(options =>
+.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 {
     options.User.RequireUniqueEmail = true;
     options.Password.RequireNonAlphanumeric = false;

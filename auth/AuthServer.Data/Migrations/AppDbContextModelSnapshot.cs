@@ -22,7 +22,7 @@ namespace AuthServer.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AuthServer.Core.Entities.RoleApp", b =>
+            modelBuilder.Entity("AuthServer.Core.Entities.ApplicationRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,7 +59,31 @@ namespace AuthServer.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("AuthServer.Core.Entities.UserApp", b =>
+            modelBuilder.Entity("AuthServer.Core.Entities.ApplicationRoleClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("AuthServer.Core.Entities.ApplicationUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -119,32 +143,13 @@ namespace AuthServer.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAECEJxPgT46o42xgljOEDySLqnLk8lQ6GYewUypKOA4pFSJR2O36oHIgHUGOq0DM3TQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHIsN/N7hOVmiFKlkdY6FW4MOLRF/MdblnFhtQXtAXrDNMXmKuNskYYObDkaNuJkiA==",
                             SecurityStamp = "17c52fda-d109-44cf-a64c-9dbfc00f24b8",
                             UserName = "admin"
                         });
                 });
 
-            modelBuilder.Entity("AuthServer.Core.Entities.UserRefreshToken", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Expiration")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("UserRefreshTokens", (string)null);
-                });
-
-            modelBuilder.Entity("AuthServer.Core.Entities.UserRoleApp", b =>
+            modelBuilder.Entity("AuthServer.Core.Entities.ApplicationUserRole", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -166,50 +171,45 @@ namespace AuthServer.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+            modelBuilder.Entity("AuthServer.Core.Entities.UserRefreshToken", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("RoleId");
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.HasKey("UserId");
+
+                    b.ToTable("UserRefreshTokens");
                 });
 
-            modelBuilder.Entity("AuthServer.Core.Entities.UserRoleApp", b =>
+            modelBuilder.Entity("AuthServer.Core.Entities.ApplicationRoleClaim", b =>
                 {
-                    b.HasOne("AuthServer.Core.Entities.RoleApp", null)
+                    b.HasOne("AuthServer.Core.Entities.ApplicationRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AuthServer.Core.Entities.ApplicationUserRole", b =>
+                {
+                    b.HasOne("AuthServer.Core.Entities.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AuthServer.Core.Entities.UserApp", null)
+                    b.HasOne("AuthServer.Core.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
-                {
-                    b.HasOne("AuthServer.Core.Entities.RoleApp", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
