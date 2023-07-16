@@ -32,6 +32,21 @@ namespace RedisCache.Services
         }
 
         /// <summary>
+        /// Set redis key values
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="action"></param>
+        /// <param name="expireTime"></param>
+        /// <returns></returns>
+        public async Task<bool> SetValueAsync<T>(string key, Func<Task<T>> action, TimeSpan? expireTime = null) where T : class
+        {
+            var expireIn = expireTime ?? TimeSpan.FromHours(1);
+            RedisValue result = JsonSerializer.SerializeToUtf8Bytes(await action());
+            await SetValueAsync(key, result, expireIn);
+            return true;
+        }
+
+        /// <summary>
         /// Get by redis cache. If there is no data related with key then create new key and set value async way.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -41,7 +56,7 @@ namespace RedisCache.Services
         /// <returns></returns>
         public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> action, TimeSpan? expireTime = null) where T : class
         {
-            var expireIn = expireTime ?? TimeSpan.FromHours(1);
+            var expireIn = expireTime ?? TimeSpan.FromDays(1);
             var result = await _cache.StringGetAsync(key);
             if (result.IsNull)
             {
