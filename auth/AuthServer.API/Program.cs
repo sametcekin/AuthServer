@@ -87,7 +87,6 @@ builder.Services
     };
 });
 
-
 builder.Services.AddRedisCacheService(builder.Configuration.GetConnectionString("Redis"));
 
 var app = builder.Build();
